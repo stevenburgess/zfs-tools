@@ -33,16 +33,15 @@ for line in arcFileLines:
 #dictionary of the arc stats we care about for this program
 #the key is a value we care about, the value is a description
 #of what that value means
-importantValues = {
-'size' : 'Current Arc Size',
-'c_min' : 'Minimum Arc Size',
-'c_max' : 'Maximum Arc Size',
-'c' : 'Target Arc Size',
-'arc_meta_used' : 'Current Arc Meta Size',
-'arc_meta_limit' : 'The Largest Arc Meta Can Be',
-'arc_meta_max' : 'The Largest Arc Meta Has Been(?)',
-'l2_size' : 'Size of L2 cache'
-}
+importantValues = [
+['size' , 'size' , 'Current Arc Size'],
+['c_min' , 'minimum' , 'Minimum Arc Size'],
+['c_max' , 'maximum' , 'Maximum Arc Size'],
+['c' , 'target' , 'Target Arc Size'],
+['arc_meta_used' , 'meta size' , 'Current Arc Meta Size'],
+['arc_meta_limit' , 'meta maximum' , 'The Largest Arc Meta Can Be'],
+['l2_size' , 'L2 size' , 'Size of L2 cache']
+]
 
 for value, description in importantValues.iteritems():
         sizeInBytes = contentDictionary[value]
