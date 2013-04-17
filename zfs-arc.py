@@ -43,8 +43,12 @@ importantValues = [
 ['l2_size' , 'L2 size' , 'Size of L2 cache']
 ]
 
-for value, description in importantValues.iteritems():
-        sizeInBytes = contentDictionary[value]
-        sizeInGb = (int(sizeInBytes)/(1024*1024*1024));
-        print value + "\t\t" + str(sizeInGb) + "\tGB\t" + description
+for entry in importantValues:
+	valueName = entry[0]
+	usefulName = entry[1]
+	valueDescription = entry[2]
+	sizeInBytes = contentDictionary[valueName]
+	sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024),3);
+	properString = '%.3f' % sizeInGb
+	print usefulName.ljust(13)  + properString.rjust(9) + "\tGB\t" + valueDescription
 
