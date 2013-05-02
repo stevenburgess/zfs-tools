@@ -1,6 +1,17 @@
 import subprocess
 
 """
+Takes in a number of bytes and returns it as a formated string. The string
+is formated to be the amount of gibibytes to three decimal places of
+precision.
+"""
+def bytesToGibibytes(bytes):
+	sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024),3);
+	properString = '%.3f' % sizeInGb
+	return properString
+
+
+"""
 system memory portion
 """
 output = subprocess.check_output(["free", "-g"])
@@ -10,6 +21,8 @@ splitLine = str.split(memoryline)
 totalSystemRamInGb = splitLine[1]
 usedSystemRamInGb = splitLine[2]
 freeSystemRamInGb = splitLine[3]
+
+print "All values are in Gibibytes"
 
 print "Total System Memory\t" + totalSystemRamInGb + "\tGB"
 print "Used System Memory\t" + usedSystemRamInGb + "\tGB"
@@ -48,7 +61,6 @@ for entry in importantValues:
 	usefulName = entry[1]
 	valueDescription = entry[2]
 	sizeInBytes = contentDictionary[valueName]
-	sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024),3);
-	properString = '%.3f' % sizeInGb
-	print usefulName.ljust(13)  + properString.rjust(9) + "\tGB\t" + valueDescription
+	formatedSizeString = bytesToGibibytes(sizeInBytes);
+	print usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription
 
