@@ -1,13 +1,17 @@
 import subprocess
 
+#there are a few options inside of /dev/disk/by-id,
+#I choose ata-
+prefixOfChoice = 'ata-'
+
 diskList = subprocess.check_output(['ls', '-l', '/dev/disk/by-id/']);
-#print diskList.split('\n')
 for line in diskList.split('\n'):
+	#exclude partition lines
 	if 'part' in line:
 		continue	
-	if 'scsi-' in line:
+	if prefixOfChoice in line:
 		brokenLine = line.split(' ')
 		for part in brokenLine:
-			if 'scsi-' in part:
+			if prefixOfChoice in part:
 				print part
 
