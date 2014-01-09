@@ -1,5 +1,6 @@
 import subprocess
 import os
+import re
 
 #there are a few options inside of /dev/disk/by-id,
 #I choose ata-
@@ -27,10 +28,22 @@ zfsDisks = []
 #a list that will only contain disks not used by ZFS in the end
 nonZfsDisks = list(allDisks)
 
+#pre compile a regular expression that matches a word starting with your chosen
+#prefix, and ending on any whitespace character
+patern = re.compile(prefixOfChoice + '\\S+')
+
+#collect the output of a zpool status
 zpoolStatus = subprocess.check_output(['zpool', 'status'])
+#for each line in the zpool status
 for zpoolLine in zpoolStatus.split('\n'):
-	if prefixOfChoice in zpoolLine:
-		diskID = zpoolLine.split(' ')[4]
+	result = patern.search(zpoolLine)
+	#if it matches the regular expression
+	if result != None:
+		#get its name from the regular expression group
+		diskID = result.group()
+		#since it was in a zpool status, add it to the list of disks
+		#zfs is using, and remove it from the list of disks zfs is
+		#not using
 		zfsDisks.append(diskID)
 		nonZfsDisks.remove(diskID)
 
