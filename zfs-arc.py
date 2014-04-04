@@ -22,13 +22,13 @@ totalSystemRamInGb = splitLine[1]
 usedSystemRamInGb = splitLine[2]
 freeSystemRamInGb = splitLine[3]
 
-print "All values are in Gibibytes"
+print("All values are in Gibibytes")
 
-print "Total System Memory\t" + totalSystemRamInGb + "\tGB"
-print "Used System Memory\t" + usedSystemRamInGb + "\tGB"
-print "Free System Memory\t" + freeSystemRamInGb + "\tGB"
+print("Total System Memory\t" + totalSystemRamInGb + "\tGB")
+print("Used System Memory\t" + usedSystemRamInGb + "\tGB")
+print("Free System Memory\t" + freeSystemRamInGb + "\tGB")
 #a seperator
-print "============"
+print("============")
 
 """
 zfs adaptive replacment cache stats are posted via kstat
@@ -62,5 +62,5 @@ for entry in importantValues:
 	valueDescription = entry[2]
 	sizeInBytes = contentDictionary[valueName]
 	formatedSizeString = bytesToGibibytes(sizeInBytes);
-	print usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription
+	print(usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription)
 
