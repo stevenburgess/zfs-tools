@@ -5,7 +5,7 @@ Takes in a number of bytes and returns it as a formated string. The string
 is formated to be the amount of gibibytes to three decimal places of
 precision.
 """
-def bytesToGibibytes(bytes):
+def bytesToGibibytes(sizeInBytes):
 	sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024),3);
 	properString = '%.3f' % sizeInGb
 	return properString
