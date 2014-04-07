@@ -14,7 +14,7 @@ def bytesToGibibytes(sizeInBytes):
 """
 system memory portion
 """
-output = subprocess.check_output(["free", "-g"])
+output = subprocess.check_output(["free", "-g"], universal_newlines=True)
 lines = output.splitlines()
 memoryline = lines[1]
 splitLine = memoryline.split()
