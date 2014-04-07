@@ -33,7 +33,7 @@ nonZfsDisks = list(allDisks)
 patern = re.compile(prefixOfChoice + '\\S+')
 
 #collect the output of a zpool status
-zpoolStatus = subprocess.check_output(['zpool', 'status'])
+zpoolStatus = subprocess.check_output(['zpool', 'status'], universal_newlines=True)
 #for each line in the zpool status
 for zpoolLine in zpoolStatus.split('\n'):
 	result = patern.search(zpoolLine)
@@ -51,15 +51,15 @@ for zpoolLine in zpoolStatus.split('\n'):
 #characters longer than the longest disk ID.
 padNumber = 45
 
-print "Disks used by ZFS:"
+print("Disks used by ZFS:")
 for disk in zfsDisks:
 	diskID = allDisks[disk]['id']
 	diskName = allDisks[disk]['dev']
-	print diskID.ljust(padNumber) + diskName.rjust(6)
+	print(diskID.ljust(padNumber) + diskName.rjust(6))
 
-print '###############'
-print "Disks not used by ZFS:"
+print('###############')
+print("Disks not used by ZFS:")
 for disk in nonZfsDisks:
 	diskID = allDisks[disk]['id']
 	diskName = allDisks[disk]['dev']
-	print diskID.ljust(padNumber) + diskName.rjust(6)
+	print(diskID.ljust(padNumber) + diskName.rjust(6))
