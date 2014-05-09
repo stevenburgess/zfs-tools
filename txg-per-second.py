@@ -26,6 +26,7 @@ def get_most_recent_txg():
     txg_file_handle = open(txg_file, 'r')
     for line in txg_file_handle:
         last_line = line
+    txg_file_handle.close()
     split_line = last_line.split(' ')
     current_txg = split_line[0]
     return int(current_txg)
