@@ -53,7 +53,6 @@ basicValues = [
 ['c' , 'target' , 'Target Arc Size'],
 ['arc_meta_used' , 'meta size' , 'Current Arc Meta Size'],
 ['arc_meta_limit' , 'meta maximum' , 'The Largest Arc Meta Can Be'],
-['l2_size' , 'L2 size' , 'Size of L2 cache']
 ]
 
 for entry in basicValues:
