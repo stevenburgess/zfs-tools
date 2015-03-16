@@ -46,7 +46,7 @@ for line in arcFileLines:
 #dictionary of the arc stats we care about for this program
 #the key is a value we care about, the value is a description
 #of what that value means
-importantValues = [
+basicValues = [
 ['size' , 'size' , 'Current Arc Size'],
 ['c_min' , 'minimum' , 'Minimum Arc Size'],
 ['c_max' , 'maximum' , 'Maximum Arc Size'],
@@ -56,7 +56,7 @@ importantValues = [
 ['l2_size' , 'L2 size' , 'Size of L2 cache']
 ]
 
-for entry in importantValues:
+for entry in basicValues:
 	valueName = entry[0]
 	usefulName = entry[1]
 	valueDescription = entry[2]
