@@ -55,6 +55,12 @@ basicValues = [
 ['arc_meta_limit' , 'meta maximum' , 'The Largest Arc Meta Can Be'],
 ]
 
+# This dictionary contains values important to the MRU and MFU.
+sizeValues = [
+['mru_size', 'MRU', 'Current MRU size'],
+['mfu_size', 'MFU', 'Current MFU size']
+]
+
 for entry in basicValues:
 	valueName = entry[0]
 	usefulName = entry[1]
