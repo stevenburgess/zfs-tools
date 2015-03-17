@@ -1,4 +1,5 @@
 import subprocess
+import argparse
 
 """
 Takes in a number of bytes and returns it as a formated string. The string
@@ -10,6 +11,14 @@ def bytesToGibibytes(sizeInBytes):
 	properString = '%.3f' % sizeInGb
 	return properString
 
+"""
+The argument parsing section of the script. It is done higher up so users
+get feedback on bad args sooner rather than later.
+"""
+parser = argparse.ArgumentParser()
+parser.add_argument("-p", "--parts", action="store_true",
+        help="Show stats about the different parts of the ARC")
+args = parser.parse_args()
 
 """
 system memory portion
