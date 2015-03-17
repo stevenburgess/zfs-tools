@@ -43,9 +43,13 @@ for line in arcFileLines:
         splitLine = str.split(line)
         contentDictionary[splitLine[0]] = splitLine[2]
 
-#dictionary of the arc stats we care about for this program
-#the key is a value we care about, the value is a description
-#of what that value means
+# Dictionaries of arc stats to display. The three values are:
+################################
+# Actual name of stat in arcstats
+# A short name to place before the stat
+# A longer explanation of the stat
+
+# The basic values we always display.
 basicValues = [
 ['size' , 'size' , 'Current Arc Size'],
 ['c_min' , 'minimum' , 'Minimum Arc Size'],
