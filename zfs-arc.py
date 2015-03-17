@@ -74,6 +74,7 @@ sizeValues = [
 ['mfu_size', 'MFU', 'Current MFU size']
 ]
 
+# Display the values we always care about
 for entry in basicValues:
 	valueName = entry[0]
 	usefulName = entry[1]
