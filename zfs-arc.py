@@ -12,6 +12,15 @@ def bytesToGibibytes(sizeInBytes):
 	return properString
 
 """
+There are quite a few statistics that are simple percentages, not bytes, this
+method makes working with them slightly easier.
+"""
+def percent(numerator, denom):
+    percent = float(numerator) / float(denom)
+    properString = '%.1f' % (100 * percent)
+    return properString
+
+"""
 The argument parsing section of the script. It is done higher up so users
 get feedback on bad args sooner rather than later.
 """
