@@ -4,63 +4,63 @@ import re
 
 #there are a few options inside of /dev/disk/by-id,
 #I choose ata-
-prefixOfChoice = 'ata-'
+prefix_of_choice = 'ata-'
 
 #a list containing all the disks connected to this machine
-allDisks = dict()
+all_disks = dict()
 
-devDir = os.listdir('/dev/disk/by-id/')
-for diskID in devDir:
+devdir = os.listdir('/dev/disk/by-id/')
+for disk_id in devdir:
         #exclude partition entries
-        if 'part' in diskID:
+        if 'part' in disk_id:
                 continue
         #only include entries with our prefix in them
-        if prefixOfChoice in diskID:
+        if prefix_of_choice in disk_id:
                 #get what it point to, should be /dev/sd*
-                devName = os.path.realpath('/dev/disk/by-id/'+diskID)
+                dev_name = os.path.realpath('/dev/disk/by-id/'+disk_id)
                 #create a dictionary for the current disk
-                currentDisk = {'id': diskID, 'dev': devName}
-                allDisks[diskID] = currentDisk
+                current_disk = {'id': disk_id, 'dev': dev_name}
+                all_disks[disk_id] = current_disk
 
 #a list of all the disks being used by ZFS
-zfsDisks = []
+zfs_disks = []
 
 #a list that will only contain disks not used by ZFS in the end
-nonZfsDisks = list(allDisks)
+nonzfs_disks = list(all_disks)
 
 #pre compile a regular expression that matches a word starting with your chosen
 #prefix, and ending on any whitespace character
-patern = re.compile(prefixOfChoice + '\\S+')
+patern = re.compile(prefix_of_choice + '\\S+')
 
 #collect the output of a zpool status
-zpoolStatus = subprocess.check_output(['zpool', 'status'],
+zpoolstatus = subprocess.check_output(['zpool', 'status'],
                                       universal_newlines=True)
 #for each line in the zpool status
-for zpoolLine in zpoolStatus.split('\n'):
-        result = patern.search(zpoolLine)
+for zpool_line in zpoolstatus.split('\n'):
+        result = patern.search(zpool_line)
         #if it matches the regular expression
         if result is not None:
                 #get its name from the regular expression group
-                diskID = result.group()
+                disk_id = result.group()
                 #since it was in a zpool status, add it to the list of disks
                 #zfs is using, and remove it from the list of disks zfs is
                 #not using
-                zfsDisks.append(diskID)
-                nonZfsDisks.remove(diskID)
+                zfs_disks.append(disk_id)
+                nonzfs_disks.remove(disk_id)
 
 #this is the number of spaces to pad the ID number.  It should be a few
 #characters longer than the longest disk ID.
-padNumber = 45
+padnumber = 45
 
 print("Disks used by ZFS:")
-for disk in zfsDisks:
-        diskID = allDisks[disk]['id']
-        diskName = allDisks[disk]['dev']
-        print(diskID.ljust(padNumber) + diskName.rjust(6))
+for disk in zfs_disks:
+        disk_id = all_disks[disk]['id']
+        disk_name = all_disks[disk]['dev']
+        print(disk_id.ljust(padnumber) + disk_name.rjust(6))
 
 print('###############')
 print("Disks not used by ZFS:")
-for disk in nonZfsDisks:
-        diskID = allDisks[disk]['id']
-        diskName = allDisks[disk]['dev']
-        print(diskID.ljust(padNumber) + diskName.rjust(6))
+for disk in nonzfs_disks:
+        disk_id = all_disks[disk]['id']
+        disk_name = all_disks[disk]['dev']
+        print(disk_id.ljust(padnumber) + disk_name.rjust(6))
