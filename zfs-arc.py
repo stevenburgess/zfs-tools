@@ -2,14 +2,14 @@ import subprocess
 import argparse
 
 
-def bytesToGibibytes(sizeInBytes):
+def bytes_to_gibibytes(size_in_bytes):
     """Takes in a number of bytes and returns it as a formated string. The
     string is formated to be the amount of gibibytes to three decimal places of
     precision.
     """
-    sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024), 3)
-    properString = '%.3f' % sizeInGb
-    return properString
+    size_in_gb = round(((float)(size_in_bytes))/(1024*1024*1024), 3)
+    proper_string = '%.3f' % size_in_gb
+    return proper_string
 
 
 def percent(numerator, denom):
@@ -17,8 +17,8 @@ def percent(numerator, denom):
     this method makes working with them slightly easier.
     """
     percent = float(numerator) / float(denom)
-    properString = '%.1f' % (100 * percent)
-    return properString
+    proper_string = '%.1f' % (100 * percent)
+    return proper_string
 
 """
 The argument parsing section of the script. It is done higher up so users
@@ -37,16 +37,16 @@ system memory portion
 output = subprocess.check_output(["free", "-g"], universal_newlines=True)
 lines = output.splitlines()
 memoryline = lines[1]
-splitLine = memoryline.split()
-totalSystemRamInGb = splitLine[1]
-usedSystemRamInGb = splitLine[2]
-freeSystemRamInGb = splitLine[3]
+splitline = memoryline.split()
+total_system_ram_gb = splitline[1]
+used_system_ram_gb = splitline[2]
+free_system_ram_gb = splitline[3]
 
 print("All values are in Gibibytes")
 
-print("Total System Memory\t" + totalSystemRamInGb + "\tGB")
-print("Used System Memory\t" + usedSystemRamInGb + "\tGB")
-print("Free System Memory\t" + freeSystemRamInGb + "\tGB")
+print("Total System Memory\t" + total_system_ram_gb + "\tGB")
+print("Used System Memory\t" + used_system_ram_gb + "\tGB")
+print("Free System Memory\t" + free_system_ram_gb + "\tGB")
 #a seperator
 print("============")
 
@@ -54,14 +54,14 @@ print("============")
 zfs adaptive replacment cache stats are posted via kstat
 to a file in proc, read in that file
 """
-arcFile = open('/proc/spl/kstat/zfs/arcstats', 'r')
+arc_file = open('/proc/spl/kstat/zfs/arcstats', 'r')
 
-arcFileLines = arcFile.readlines()
-#fill the contentDictionary with key/value pairs
-contentDictionary = {}
-for line in arcFileLines:
-        splitLine = str.split(line)
-        contentDictionary[splitLine[0]] = splitLine[2]
+arc_file_lines = arc_file.readlines()
+#fill the content_dictionary with key/value pairs
+content_dictionary = {}
+for line in arc_file_lines:
+        splitline = str.split(line)
+        content_dictionary[splitline[0]] = splitline[2]
 
 # Dictionaries of arc stats to display. The three values are:
 ################################
@@ -70,7 +70,7 @@ for line in arcFileLines:
 # A longer explanation of the stat
 
 # The basic values we always display.
-basicValues = [
+basic_values = [
     ['size', 'size', 'Current Arc Size'],
     ['c_min', 'minimum', 'Minimum Arc Size'],
     ['c_max', 'maximum', 'Maximum Arc Size'],
@@ -80,30 +80,30 @@ basicValues = [
 ]
 
 # This dictionary contains values important to the MRU and MFU.
-sizeValues = [
+size_values = [
     ['mru_size', 'MRU', 'Current MRU size'],
     ['mfu_size', 'MFU', 'Current MFU size']
 ]
 
 # Display the values we always care about
-for entry in basicValues:
-        valueName = entry[0]
-        usefulName = entry[1]
-        valueDescription = entry[2]
-        sizeInBytes = contentDictionary[valueName]
-        formatedSizeString = bytesToGibibytes(sizeInBytes)
-        print(usefulName.ljust(13) + formatedSizeString.rjust(9) +
-              "\tGB\t" + valueDescription)
+for entry in basic_values:
+        value_name = entry[0]
+        useful_name = entry[1]
+        value_description = entry[2]
+        size_in_bytes = content_dictionary[value_name]
+        formated_size_string = bytes_to_gibibytes(size_in_bytes)
+        print(useful_name.ljust(13) + formated_size_string.rjust(9) +
+              "\tGB\t" + value_description)
 
 if args.parts:
     print("============")
-    totalSize = contentDictionary['size']
-    for entry in sizeValues:
-            valueName = entry[0]
-            usefulName = entry[1]
-            valueDescription = entry[2]
-            sizeInBytes = contentDictionary[valueName]
-            percentOfArc = percent(sizeInBytes, totalSize)
-            formatedSizeString = bytesToGibibytes(sizeInBytes)
-            print(usefulName.ljust(13) + formatedSizeString.rjust(9) +
-                  "\tGB\t" + valueDescription + ' (' + percentOfArc + '%)')
+    total_size = content_dictionary['size']
+    for entry in size_values:
+            value_name = entry[0]
+            useful_name = entry[1]
+            value_description = entry[2]
+            size_in_bytes = content_dictionary[value_name]
+            percent_of_arc = percent(size_in_bytes, total_size)
+            formated_size_string = bytes_to_gibibytes(size_in_bytes)
+            print(useful_name.ljust(13) + formated_size_string.rjust(9) +
+                  "\tGB\t" + value_description + ' (' + percent_of_arc + '%)')
