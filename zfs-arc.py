@@ -92,3 +92,14 @@ for entry in basicValues:
 	formatedSizeString = bytesToGibibytes(sizeInBytes);
 	print(usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription)
 
+if args.parts:
+    print("============")
+    totalSize = contentDictionary['size']
+    for entry in sizeValues:
+            valueName = entry[0]
+            usefulName = entry[1]
+            valueDescription = entry[2]
+            sizeInBytes = contentDictionary[valueName]
+            percentOfArc = percent(sizeInBytes, totalSize)
+            formatedSizeString = bytesToGibibytes(sizeInBytes);
+            print(usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription + ' (' + percentOfArc + '%)')
