@@ -1,21 +1,21 @@
 import subprocess
 import argparse
 
-"""
-Takes in a number of bytes and returns it as a formated string. The string
-is formated to be the amount of gibibytes to three decimal places of
-precision.
-"""
-def bytesToGibibytes(sizeInBytes):
-	sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024),3);
-	properString = '%.3f' % sizeInGb
-	return properString
 
-"""
-There are quite a few statistics that are simple percentages, not bytes, this
-method makes working with them slightly easier.
-"""
+def bytesToGibibytes(sizeInBytes):
+    """Takes in a number of bytes and returns it as a formated string. The
+    string is formated to be the amount of gibibytes to three decimal places of
+    precision.
+    """
+    sizeInGb = round(((float)(sizeInBytes))/(1024*1024*1024), 3)
+    properString = '%.3f' % sizeInGb
+    return properString
+
+
 def percent(numerator, denom):
+    """There are quite a few statistics that are simple percentages, not bytes,
+    this method makes working with them slightly easier.
+    """
     percent = float(numerator) / float(denom)
     properString = '%.1f' % (100 * percent)
     return properString
@@ -25,8 +25,10 @@ The argument parsing section of the script. It is done higher up so users
 get feedback on bad args sooner rather than later.
 """
 parser = argparse.ArgumentParser()
-parser.add_argument("-p", "--parts", action="store_true",
-        help="Show stats about the different parts of the ARC")
+parser.add_argument(
+    "-p",
+    "--parts", action="store_true",
+    help="Show stats about the different parts of the ARC")
 args = parser.parse_args()
 
 """
@@ -52,9 +54,9 @@ print("============")
 zfs adaptive replacment cache stats are posted via kstat
 to a file in proc, read in that file
 """
-arcFile = open('/proc/spl/kstat/zfs/arcstats','r')
+arcFile = open('/proc/spl/kstat/zfs/arcstats', 'r')
 
-arcFileLines = arcFile.readlines();
+arcFileLines = arcFile.readlines()
 #fill the contentDictionary with key/value pairs
 contentDictionary = {}
 for line in arcFileLines:
@@ -69,28 +71,29 @@ for line in arcFileLines:
 
 # The basic values we always display.
 basicValues = [
-['size' , 'size' , 'Current Arc Size'],
-['c_min' , 'minimum' , 'Minimum Arc Size'],
-['c_max' , 'maximum' , 'Maximum Arc Size'],
-['c' , 'target' , 'Target Arc Size'],
-['arc_meta_used' , 'meta size' , 'Current Arc Meta Size'],
-['arc_meta_limit' , 'meta maximum' , 'The Largest Arc Meta Can Be'],
+    ['size', 'size', 'Current Arc Size'],
+    ['c_min', 'minimum', 'Minimum Arc Size'],
+    ['c_max', 'maximum', 'Maximum Arc Size'],
+    ['c', 'target', 'Target Arc Size'],
+    ['arc_meta_used', 'meta size', 'Current Arc Meta Size'],
+    ['arc_meta_limit', 'meta maximum', 'The Largest Arc Meta Can Be'],
 ]
 
 # This dictionary contains values important to the MRU and MFU.
 sizeValues = [
-['mru_size', 'MRU', 'Current MRU size'],
-['mfu_size', 'MFU', 'Current MFU size']
+    ['mru_size', 'MRU', 'Current MRU size'],
+    ['mfu_size', 'MFU', 'Current MFU size']
 ]
 
 # Display the values we always care about
 for entry in basicValues:
-	valueName = entry[0]
-	usefulName = entry[1]
-	valueDescription = entry[2]
-	sizeInBytes = contentDictionary[valueName]
-	formatedSizeString = bytesToGibibytes(sizeInBytes);
-	print(usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription)
+        valueName = entry[0]
+        usefulName = entry[1]
+        valueDescription = entry[2]
+        sizeInBytes = contentDictionary[valueName]
+        formatedSizeString = bytesToGibibytes(sizeInBytes)
+        print(usefulName.ljust(13) + formatedSizeString.rjust(9) +
+              "\tGB\t" + valueDescription)
 
 if args.parts:
     print("============")
@@ -101,5 +104,6 @@ if args.parts:
             valueDescription = entry[2]
             sizeInBytes = contentDictionary[valueName]
             percentOfArc = percent(sizeInBytes, totalSize)
-            formatedSizeString = bytesToGibibytes(sizeInBytes);
-            print(usefulName.ljust(13)  + formatedSizeString.rjust(9) + "\tGB\t" + valueDescription + ' (' + percentOfArc + '%)')
+            formatedSizeString = bytesToGibibytes(sizeInBytes)
+            print(usefulName.ljust(13) + formatedSizeString.rjust(9) +
+                  "\tGB\t" + valueDescription + ' (' + percentOfArc + '%)')
