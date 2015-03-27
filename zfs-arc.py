@@ -29,6 +29,10 @@ parser.add_argument(
     "-p",
     "--parts", action="store_true",
     help="Show stats about the different parts of the ARC")
+parser.add_argument(
+    "-e",
+    "--efficiency", action="store_true",
+    help="Display efficiency statistics from the SLAB stores")
 args = parser.parse_args()
 
 """
@@ -107,3 +111,38 @@ if args.parts:
             formated_size_string = bytes_to_gibibytes(size_in_bytes)
             print(useful_name.ljust(13) + formated_size_string.rjust(9) +
                   "\tGB\t" + value_description + ' (' + percent_of_arc + '%)')
+
+
+if args.efficiency:
+    """Efficiency statistics for the SPLs internal slab implementation. Note
+    that in ZoL 0.6.3 and onward objects smaller than the
+    spl_kmem_cache_slab_limit parameter use the Linux kernel SLAB
+    allocator and will not show up in these numbers.
+    """
+    print("============")
+    slab_file = open('/proc/spl/kmem/slab')
+
+    # The first two lines descibe the rest of the file, skip them and get to
+    # the information this loop needs.
+    slab_file.readline()
+    slab_file.readline()
+
+    size = 0
+    alloc = 0
+
+    for line in slab_file:
+        splitline = str.split(line)
+        # Column 2 is described as:
+        # The total amount of memory allocated for this slab
+        size += int(splitline[2])
+        # Column 3 is described as:
+        # The total amount of memory *in use* by users of this cache
+        alloc += int(splitline[3])
+
+    print("size:".ljust(13) + bytes_to_gibibytes(size).rjust(9) + "\tGB\t" +
+          "Current size of all slabs allocated by SPLs slab allocator")
+    print("alloc:".ljust(13) + bytes_to_gibibytes(alloc).rjust(9) + "\tGB\t" +
+          "Current space used in the above slabs")
+    percent_efficency = percent(alloc, size)
+    print("efficiency:".ljust(13) + percent_efficency.rjust(9) + "\t%\t" +
+          "The efficiency of the SPL slab allocator")
