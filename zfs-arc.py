@@ -64,8 +64,8 @@ arc_file_lines = arc_file.readlines()
 #fill the content_dictionary with key/value pairs
 content_dictionary = {}
 for line in arc_file_lines:
-        splitline = str.split(line)
-        content_dictionary[splitline[0]] = splitline[2]
+    splitline = str.split(line)
+    content_dictionary[splitline[0]] = splitline[2]
 
 # Dictionaries of arc stats to display. The three values are:
 ################################
